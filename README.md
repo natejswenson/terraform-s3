@@ -103,4 +103,7 @@ region = "us-east-1"
 If you log into the aws console and go to the s3 bucket section you should see somethign like this:
 ![GitHub Logo](/images/s3.png)
 
+When you click on the log bucket you should see a structure that looks something like this:
+![test](/images/s3-log.png)
+
 
