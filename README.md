@@ -2,15 +2,19 @@
 This terraform module will create an s3 bucket with kms encryption with an attached policy and also create a log-{{ bucket_name }} bucket for logging.
 
 ### Assumptions:
-1. you have an aws account
-2. you have terraform and aws-cli installed on your machine
+1. we are created a empty bucket 
+3. the bucket does not need access to other aws services
+4. the bucket will be versioned
+5. logging to /log in the log bucket
+6. this is a prototype - this should be launched via a pipeline or some other automated means where credentials can be pulled from vault
+7. policy should be attached via a var for simplicity sake it was included in main.
 
 ### Usage
 #### Clone this repo locally to yoru machine
  ```sh
 git clone git@github.com:natejswenson/terraform-s3.git
 cd terraform-s3
- ```
+```
 #### Input Variables (main.auto.tfvars):
 ```yml
 kms_key_alias: "short alias for kms key"
@@ -26,7 +30,7 @@ aws_secret_key: "aws_secrect_key associated with your cli-user"
 kms_key_arn: "arn for kms key"
 name: "s3 bucket name"
 region: "aws region where named bucket was created"
-}
+```
 #### Bucket Policy (main.tf)
 ```yml
 {
@@ -75,5 +79,5 @@ Changes to Outputs:
 ```sh
 terraform apply
 ```
-Log into your aws acount via console or terminal and verify the buckets were created successfuly with the correct policy and permissions.
+
 
