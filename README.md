@@ -8,7 +8,6 @@ This terraform module will create an s3 bucket with kms encryption with an attac
 4. buckets will be versioned
 5. logging will go to the logging bucket in the corresponding folder
 6. this is a prototype - this should be launched via a pipeline or some other automated means where credentials can be pulled from vault
-7. policy should be attached via a var for simplicity sake it was included in main.
 
 ### Usage
 #### Clone this repo locally to yoru machine
@@ -33,36 +32,6 @@ aws_secret_key: "aws_secrect_key associated with your cli-user"
 kms_key_arn: "arn for kms key"
 name: "s3 bucket name"
 region: "aws region where named bucket was created"
-```
-#### Bucket Policy (main.tf)
-```yml
-{
-    "Version": "2012-10-17",
-    "Id": "Policy1357935677554",
-    "Statement": [
-        {
-            "Sid": "Stmt1357935647218",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "${data.aws_caller_identity.current.arn}"
-            },
-            "Action": "s3:ListBucket",
-            "Resource": "arn:aws:s3:::${var.s3_bucket}"
-        },
-        {
-            "Sid": "Stmt1357935676138",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "${data.aws_caller_identity.current.arn}"
-            },
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
-            "Resource": "arn:aws:s3:::${var.s3_bucket}/*"
-        }
-    ]
-}
 ```
 5. From terminal:
 ```sh
