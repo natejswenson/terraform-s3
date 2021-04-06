@@ -2,10 +2,11 @@
 This terraform module will create an s3 bucket with kms encryption with an attached policy and also create a log-{{ bucket_name }} bucket for logging.
 
 ### Assumptions:
-1. we are created a empty bucket 
-3. the bucket does not need access to other aws services
-4. the bucket will be versioned
-5. logging to /log in the log bucket
+1. create 3 buckets: {**Dev**, **Stage**, and **Prod**}
+2. create another bucket for logging with 3 folders: {**dev/**, **stage/**, and **prod/**}
+3. buckets *will not* have access to other aws resources
+4. buckets will be versioned
+5. logging will go to the logging bucket in the corresponding folder
 6. this is a prototype - this should be launched via a pipeline or some other automated means where credentials can be pulled from vault
 7. policy should be attached via a var for simplicity sake it was included in main.
 
@@ -19,8 +20,10 @@ cd terraform-s3
 ```yml
 kms_key_alias: "short alias for kms key"
 kms_key_description: "same as kms_key_alias in our example"
-kms_deletion_window_in_days:"days to keep kms keys ( 7-30 )"
-s3_bucket: "s3 bucket name"
+kms_deletion_window_in_days: "days to keep kms keys ( 7-30 )"
+s3_bucket: "array of buckets to be created"
+s3_logbucket: "name for he log bucket"
+folder: "array of folders to create within the s3_logbucket"
 aws_region: "aws region to create s3 bucket"
 aws_access_key: "aws_access_key associated with your cli-user" 
 aws_secret_key: "aws_secrect_key associated with your cli-user"
@@ -79,5 +82,25 @@ Changes to Outputs:
 ```sh
 terraform apply
 ```
+Assuming all went is planned you should see somthing like below:
+```yml
+
+Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+kms_key_alais_arn = "arn:aws:kms:us-east-1:**************:alias/kms"
+kms_key_alias_name = "alias/kms"
+kms_key_arn = "arn:aws:kms:us-east-1:**************:key/86bf585b-1bd2-45fb-91d4-89d3003495c7"
+kms_key_id = "86bf585b-****-****-****-89d3003495c7"
+name = tolist([
+  "dev-well-interview",
+  "stage-log-well-interview",
+  "prod-log-well-interview",
+])
+region = "us-east-1"
+```
+If you log into the aws console and go to the s3 bucket section you should see somethign like this:
+![GitHub Logo](/images/s3.png)
 
 
