@@ -4,12 +4,12 @@
 #########################################################################################
 variable "kms_key_alias" {
     description = "REQUIRED, name given to kms key"
-    default = "wellnatekms"
+    default = "wellkms"
 }
 
 variable "kms_key_description" {
     description = "OPTIONAL, self explanitory"
-    default = "wellnatekms"
+    default = "wellkms"
 }
 
 variable "kms_deletion_window_in_days" {
@@ -33,14 +33,11 @@ variable "tags" {
 #########################################################################################
 variable "aws_region" {
     description = "REQURIED, aws region you want your bucket created in"
-    default = "us-east-1"
 }
 
 variable "aws_access_key"{
     description = "REQUIRED, aws_access_key associated with your cli-user" 
-    default = "AKIATE6YQ3LAAQZF66FC"
 }
 variable "aws_secret_key"{
     description = "REQUIRED, aws_secrect_key associated with your cli-user"
-    default = "HHDmhX2GjN2pwfkPDUY0B/hPy4atC5ye3Ca3IRYt"
 }
