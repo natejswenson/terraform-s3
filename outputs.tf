@@ -14,14 +14,10 @@ output "kms_key_alias_name" {
     value = aws_kms_alias.description.name
 }
 
-output "account_id" {
-    value = data.aws_caller_identity.current.account_id
+output "name" {
+    value = var.s3_bucket
 }
 
-output "caller_user" {
-    value = data.aws_caller_identity.current.user_id
-}
-
-output "caller_arn" {
-    value = data.aws_caller_identity.current.arn
+output "region" {
+    value = var.aws_region
 }

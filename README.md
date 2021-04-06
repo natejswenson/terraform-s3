@@ -2,5 +2,5 @@
 ### Assumptions:
 1. you have an aws account
 2. you have terraform and aws-cli installed on your machine
-### Getting Started
+### Usage
 1. `git clone `

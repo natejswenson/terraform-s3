@@ -1,43 +1,37 @@
 ########################################################################################
-# in general i frown upon defaults in most cased but for ease setup and to ensure
-# we are all working with the same env  i have set a few things for you
+#KMS KEYS
 #########################################################################################
 variable "kms_key_alias" {
-    description = "REQUIRED, name given to kms key"
-    default = "wellkms"
+    description = "short alias for kms key"
 }
 
 variable "kms_key_description" {
-    description = "OPTIONAL, self explanitory"
-    default = "wellkms"
+    description = "same as kms_key_alias in our example"
 }
 
 variable "kms_deletion_window_in_days" {
-    description = "REQUIRED,days until kms key goes bye-bye"
-    default = "7"
+    description = "days to keep kms keys ( 7-30 )"
 }
 
+########################################################################################
+#S3 BUCKET
+#########################################################################################
 variable "s3_bucket" {
-    description = "REQUIRED, name used for both app bucket and log bucket"
-    default = "natejswenson-well-interview"
+    description = "s3 bucket name"
 }
-
-# set in tfvars 
 variable "tags" {
     type = map(string)  
 }
 ########################################################################################
-# for security i would use vault or some other secret manager to store this 
-# for demo purposed  region, key and secret must be entered at execution via cli
-# for test purposed you can use values found locally at ~/.aws/credentials
+#AWS CREDS
 #########################################################################################
 variable "aws_region" {
-    description = "REQURIED, aws region you want your bucket created in"
+    description = "aws region to create s3 bucket"
 }
 
 variable "aws_access_key"{
-    description = "REQUIRED, aws_access_key associated with your cli-user" 
+    description = "aws_access_key associated with your cli-user" 
 }
 variable "aws_secret_key"{
-    description = "REQUIRED, aws_secrect_key associated with your cli-user"
+    description = "aws_secrect_key associated with your cli-user"
 }
