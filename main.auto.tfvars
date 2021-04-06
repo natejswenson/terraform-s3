@@ -21,6 +21,6 @@ folder = ["dev/", "stage/","prod/"]
 ########################################################################################
 #AWS
 ########################################################################################
-aws_region = "us-east-1"
-aws_access_key = "AKIATE6YQ3LAAQZF66FC"
-aws_secret_key = "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"
+#aws_region = ""
+#aws_access_key = ""
+#aws_secret_key = ""
