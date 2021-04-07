@@ -1,62 +1,55 @@
 ## s3-terraform
-This terraform module will create an s3 bucket with kms encryption with an attached policy and also create a log-{{ bucket_name }} bucket for logging.
+This module will create s3 bucket(s) with kms encryption as well as a bucket with seprate prefixes for storing logs.
+### Expected Inputs 
+| var                           | default           | description                               |
+|-------------------------------|-------------------|-------------------------------------------|
+| **kms_key_alias**             | kms               | short alias for kms key                   |
+| **kms_key_description**       | kms               | same as kms_key_alias in our example      |
+|**kms_deletion_window_in_days**|7                  | days to keep kms keys ( 7-30 )            |
+|**s3_logbucke**                |well-interview-log | name for the log bucket 
+|**folder**                     |dev/,stage/,prod/  | name used as prefix for buckets {dev-well-interview} as well as folder structure within the log bucket |
+|**aws_region**                 | *user defined*    |aws region where buckets will be created |
+|**aws_access_key**             | *user defined*    |aws access key for which the buckets will be created |
+|**aws_secret_key**             | *user defined*    |aws secret key for which the buckets will be created |
+
+### Expected Outputs 
+ var                            | description     |
+|-------------------------------|-----------------|
+|**kms_key_arn**                |arn for kms key  |
+|**name**                       |s3 bucket names  |
+|**log_name**                   |s3 log bucket name|
+|**region**                     |aws region|
 
 ### Assumptions:
-1. create 3 buckets: {**Dev**, **Stage**, and **Prod**}
-2. create another bucket for logging with 3 folders: {**dev/**, **stage/**, and **prod/**}
-3. buckets *will not* have access to other aws resources
+1. create buckets which are created at will share common kms key and security
+2. logging will be done in a single bucket regardless of number of buckets being created.
+3. buckets *will not* have access to other aws resources however could be configured
 4. buckets will be versioned
-5. logging will go to the logging bucket in the corresponding folder
-6. this is a prototype - this should be launched via a pipeline or some other automated means where credentials can be pulled from vault
+6. **prototype only** credentials should eventually be pulled from vault
 
 ### Usage
-#### Clone this repo locally to yoru machine
  ```sh
 git clone git@github.com:natejswenson/terraform-s3.git
 cd terraform-s3
-```
-#### Input Variables (main.auto.tfvars):
-```yml
-kms_key_alias: "short alias for kms key"
-kms_key_description: "same as kms_key_alias in our example"
-kms_deletion_window_in_days: "days to keep kms keys ( 7-30 )"
-s3_bucket: "array of buckets to be created"
-s3_logbucket: "name for he log bucket"
-folder: "array of folders to create within the s3_logbucket"
-aws_region: "aws region to create s3 bucket"
-aws_access_key: "aws_access_key associated with your cli-user" 
-aws_secret_key: "aws_secrect_key associated with your cli-user"
-```
-#### Output Variables (output.tf
-```yml
-kms_key_arn: "arn for kms key"
-name: "s3 bucket name"
-region: "aws region where named bucket was created"
-```
-5. From terminal:
-```sh
 terraform init
 terraform plan
 ```
-before continuing verify that your plan includes the creation of 2 buckets with attached policy, and kms keys in the correct region Output should look similar to this:
-```yml
-Changes to Outputs:
-  + kms_key_alais_arn  = (known after apply)
-  + kms_key_alias_name = "alias/wellkms"
-  + kms_key_arn        = (known after apply)
-  + kms_key_id         = (known after apply)
-  + name               = "natejswenson-well-interview"
-  + region             = "us-east-1"
+#### Example .tvars inputs:
+```js
+kms_key_alias = "kms"
+kms_key_description = "kms"
+kms_deletion_window_in_days = "7"
+s3_bucket = ["dev-well-interview", "stage-log-well-interview", "prod-log-well-interview"]
+tags = {"purpose" = "interview-assignment","app_name" = "test_app"}
+s3_logbucket = "well-interview-log"
+folder = ["dev/", "stage/","prod/"]
+aws_region = "us-east-1"
+aws_access_key = "xxx-xxxx-xxx-xxx"
+aws_secret_key = "xxx-xxx-xxx-xxx-xxx-xxx"
 ```
+### Example CLI Outputs:
 ```sh
-terraform apply
-```
-Assuming all went is planned you should see somthing like below:
-```yml
-
 Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
-
-Outputs:
 
 kms_key_alais_arn = "arn:aws:kms:us-east-1:**************:alias/kms"
 kms_key_alias_name = "alias/kms"
@@ -69,6 +62,7 @@ name = tolist([
 ])
 region = "us-east-1"
 ```
+### Example Console Views
 If you log into the aws console and go to the s3 bucket section you should see somethign like this:
 ![GitHub Logo](/images/s3.png)
 
